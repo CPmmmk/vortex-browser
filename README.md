@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/CPmmmk/vortex/releases/latest">
+  <a href="https://github.com/CPmmmk/vortex-browser/archive/refs/tags/v1.0.0.zip">
     <b>📦 Clique aqui para baixar a versão em .ZIP</b>
   </a>
 </p>
