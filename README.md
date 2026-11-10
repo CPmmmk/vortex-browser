@@ -1,16 +1,22 @@
-## 🚀 Sobre o Projetos
+<p align="center">
+  <img src="assets/logo.png" alt="Vortex Logo" width="120">
+</p>
 
-O **Vortex** é um navegador experimental desenvolvido em Python e Web, criado para quem busca simplicidade, consumo mínimo de memória e uma estética limpa no Linux.
+<h1 align="center">Vortex Browser</h1>
 
-## 📁 Estrutura do Projeto
+<p align="center">
+  Navegador minimalista, leve e focado em minimalismo para Linux.
+</p>
 
-* `main.py` — Código principal e inicializador do navegador.
-* `home.html` — Tela inicial personalizada do navegador.
-* `assets/` — Recursos visuais e logos.
+<p align="center">
+  <a href="https://github.com/CPmmmk/vortex/releases/latest">
+    <b>📦 Clique aqui para baixar a versão em .ZIP</b>
+  </a>
+</p>
 
-## 🛠️ Como Executar
+---
 
-Para rodar o Vortex localmente, certifique-se de ter o Python instalado e execute:
-
-```bash
-python main.py
+## 🤔 Como usar
+1. Baixe o arquivo `.zip` no botão acima.
+2. Extraia a pasta no seu Linux.
+3. Abra o terminal na pasta e rode `python main.py`.
