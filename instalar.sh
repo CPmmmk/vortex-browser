@@ -14,7 +14,7 @@ cat << EOF > "$DESTINO_DESKTOP"
 Version=1.0
 Type=Application
 Name=Vortex Browser
-Comment=Navegador leve e otimizado para jogos
+Comment=Navegador leve e otimizado
 Exec=python3 "$ARQUIVO_MAIN"
 Icon=$ARQUIVO_ICONE
 Terminal=false
