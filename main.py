@@ -1,7 +1,7 @@
 import os
 import sys
 
-# 1. Flags de desempenho (GPU) e Dark Mode forçado no motor do navegador
+
 os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = (
     "--ignore-gpu-blocklist"
     "--blink-settings=forceDarkModeEnabled=true"
@@ -26,7 +26,7 @@ from PyQt5.QtWebEngineWidgets import (
 from PyQt5.QtWebEngineCore import QWebEngineUrlRequestInterceptor
 from PyQt5.QtGui import QIcon
 
-# Estilo "Pretão Universo" (#000000) para toda a interface do navegador
+
 DARK_UNIVERSE_STYLE = """
 QMainWindow, QWidget {
     background-color: #000000;
@@ -117,7 +117,7 @@ class BrowserPage(QWidget):
     layout.setContentsMargins(0, 0, 0, 0)
 
     self.browser = QWebEngineView()
-    # Define o fundo inicial como preto absoluto para não dar clarão branco ao abrir aba
+   
     self.browser.page().setBackgroundColor(Qt.black)
 
     self.page = QWebEnginePage(profile, self.browser)
@@ -139,7 +139,6 @@ class CPBrowser(QMainWindow):
     if os.path.exists(icon_path):
       self.setWindowIcon(QIcon(icon_path))
 
-    # Configuração global do perfil e AdBlocker
     self.profile = QWebEngineProfile.defaultProfile()
     self.interceptor = AdBlocker()
     self.profile.setUrlRequestInterceptor(self.interceptor)
@@ -159,9 +158,8 @@ class CPBrowser(QMainWindow):
     self.tabs.setTabsClosable(True)
     self.tabs.tabCloseRequested.connect(self.close_tab)
     self.tabs.currentChanged.connect(self.on_tab_changed)
-    self.setCentralWidget(self.tabs)
-
-    # Barra de ferramentas
+    self.setCentralWidget(self.tabs) 
+      
     navbar = QToolBar()
     navbar.setMovable(False)
     self.addToolBar(navbar)
@@ -219,7 +217,7 @@ class CPBrowser(QMainWindow):
     if self.tabs.count() > 1:
       widget = self.tabs.widget(index)
       self.tabs.removeTab(index)
-      widget.deleteLater()  # Libera a RAM da aba fechada imediatamente
+      widget.deleteLater()  
     else:
       self.close()
 
@@ -227,12 +225,11 @@ class CPBrowser(QMainWindow):
     if index == -1:
       return
 
-    # Atualiza barra de URL
     active_widget = self.tabs.widget(index)
     current_url = active_widget.browser.url().toString()
     self.url_bar.setText("" if "home.html" in current_url else current_url)
 
-    # Pausa renderização das abas inativas para economizar CPU sem matar o site
+    
     for i in range(self.tabs.count()):
       widget = self.tabs.widget(i)
       if widget:
