@@ -4,21 +4,20 @@ echo "========================================="
 echo "   Instalando o Vortex Browser...        "
 echo "========================================="
 
-PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ICON_PATH="$PROJECT_DIR/assets/logo.png"
-
-if [ ! -f "$ICON_PATH" ]; then
-    echo "Aviso: logo.png não encontrado em assets/. O atalho ficará sem ícone."
-    ICON_PATH="web-browser"
-fi
-
+cd "$(dirname "${BASH_SOURCE[0]}")"
+PROJECT_DIR="$(pwd)"
 
 echo "[1/3] Criando ambiente virtual..."
 python3 -m venv "$PROJECT_DIR/venv"
 
-echo "[2/3] Instalando dependências..."
+echo "[2/3] Instalando PyQt5..."
 "$PROJECT_DIR/venv/bin/pip" install --upgrade pip > /dev/null 2>&1
-"$PROJECT_DIR/venv/bin/pip" install -r "$PROJECT_DIR/requirements.txt"
+"$PROJECT_DIR/venv/bin/pip" install PyQt5
+
+ICON_PATH="$PROJECT_DIR/assets/logo.png"
+if [ ! -f "$ICON_PATH" ]; then
+    ICON_PATH="web-browser"
+fi
 
 echo "[3/3] Adicionando o Vortex ao menu de aplicativos..."
 DESKTOP_DIR="$HOME/.local/share/applications"
