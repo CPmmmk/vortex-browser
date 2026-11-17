@@ -31,6 +31,6 @@ EOF
 chmod +x "$DESKTOP_DIR/vortex-browser.desktop"
 update-desktop-database "$DESKTOP_DIR" 2>/dev/null
 
-echo "========================================="
-echo "  Pronto! O Vortex foi baixado com sucesso! :)"
-echo "========================================="
+echo "==================================================="
+echo "  Vortex foi instalado no seu menu com sucesso!  :)"
+echo "==================================================="
