@@ -40,7 +40,7 @@ class VortexBrowser(QMainWindow):
         self.setGeometry(100, 100, 1100, 700)
         
         if os.path.exists("assets/logo.png"):
-            self.setWindowIcon(QIcon("assets/logo.png"))
+            self.setWindowIcon(QIcon("assets/vaca_dourada.png"))
 
         self.central_widget = QWidget()
         self.setCentralWidget(self.central_widget)
@@ -90,13 +90,11 @@ class VortexBrowser(QMainWindow):
 
         self.layout.addWidget(self.tabs)
 
-        # Conexões
         self.url_bar.returnPressed.connect(self.navigate_to_url)
         self.back_btn.clicked.connect(lambda: self.current_view().back())
         self.forward_btn.clicked.connect(lambda: self.current_view().forward())
         self.reload_btn.clicked.connect(lambda: self.current_view().reload())
 
-        # Atalhos
         QShortcut(QKeySequence("Ctrl+="), self, lambda: self.current_tab_widget().zoom_in())
         QShortcut(QKeySequence("Ctrl+-"), self, lambda: self.current_tab_widget().zoom_out())
         QShortcut(QKeySequence("Ctrl+0"), self, lambda: self.current_tab_widget().reset_zoom())
@@ -105,7 +103,6 @@ class VortexBrowser(QMainWindow):
         QShortcut(QKeySequence("Ctrl+T"), self, lambda: self.add_new_tab())
         QShortcut(QKeySequence("Ctrl+W"), self, lambda: self.close_tab(self.tabs.currentIndex()))
 
-        # Home page local
         home_path = os.path.abspath("home.html")
         if not os.path.exists(home_path):
             with open(home_path, "w", encoding="utf-8") as f:
