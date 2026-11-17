@@ -39,7 +39,7 @@ class VortexBrowser(QMainWindow):
         self.setWindowTitle("Vortex Browser")
         self.setGeometry(100, 100, 1100, 700)
         
-        if os.path.exists("assets/logo.png"):
+        if os.path.exists("assets/vaca_dourada.png"):
             self.setWindowIcon(QIcon("assets/vaca_dourada.png"))
 
         self.central_widget = QWidget()
