@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import (
     QLineEdit, QPushButton, QTabWidget, QShortcut
 )
 from PyQt5.QtGui import QKeySequence, QIcon
-from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile
+from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 class BrowserTab(QWidget):
     def __init__(self, parent_browser):
@@ -15,12 +15,7 @@ class BrowserTab(QWidget):
         self.layout = QVBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         
-        self.profile = QWebEngineProfile(str(os.getpid()), self)
-        self.profile.setHttpUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) VortexBrowser/1.0 Safari/537.36")
-        
         self.view = QWebEngineView()
-        self.view.page().setProfile(self.profile)
-        
         self.layout.addWidget(self.view)
         
         self.zoom_factor = 1.0
@@ -52,42 +47,56 @@ class VortexBrowser(QMainWindow):
         self.layout = QVBoxLayout(self.central_widget)
         self.layout.setContentsMargins(4, 4, 4, 4)
 
-        self.nav_layout = QHBoxLayout()
-        
+        self.top_bar_layout = QHBoxLayout()
+        self.top_bar_layout.setSpacing(6)
+
         self.back_btn = QPushButton("←")
         self.forward_btn = QPushButton("→")
         self.reload_btn = QPushButton("↻")
         self.url_bar = QLineEdit()
+        self.new_tab_btn = QPushButton("+")
         
         for btn in (self.back_btn, self.forward_btn, self.reload_btn):
             btn.setFixedWidth(35)
+            btn.setFixedHeight(30)
 
-        self.nav_layout.addWidget(self.back_btn)
-        self.nav_layout.addWidget(self.forward_btn)
-        self.nav_layout.addWidget(self.reload_btn)
-        self.nav_layout.addWidget(self.url_bar)
+        self.new_tab_btn.setFixedWidth(35)
+        self.new_tab_btn.setFixedHeight(30)
+        self.new_tab_btn.setToolTip("Abrir nova aba")
+        self.new_tab_btn.clicked.connect(lambda: self.add_new_tab())
 
-        self.layout.addLayout(self.nav_layout)
+        self.url_bar.setFixedHeight(30)
+
+        self.top_bar_layout.addWidget(self.back_btn)
+        self.top_bar_layout.addWidget(self.forward_btn)
+        self.top_bar_layout.addWidget(self.reload_btn)
+        self.top_bar_layout.addWidget(self.url_bar)
+        self.top_bar_layout.addWidget(self.new_tab_btn) 
+
+        self.layout.addLayout(self.top_bar_layout)
 
         self.tabs = QTabWidget()
         self.tabs.setTabsClosable(True)
         self.tabs.setDocumentMode(True)
+        
+        tab_bar = self.tabs.tabBar()
+        tab_bar.setElideMode(Qt.TextElideMode.ElideRight)  
+        tab_bar.setUsesScrollButtons(True)                 
+        tab_bar.setExpanding(False)                       
+        tab_bar.setMovable(True)                
+
         self.tabs.tabCloseRequested.connect(self.close_tab)
         self.tabs.currentChanged.connect(self.tab_changed)
-        
-        self.new_tab_btn = QPushButton("+")
-        self.new_tab_btn.setFixedWidth(30)
-        self.new_tab_btn.setToolTip("Abrir nova aba")
-        self.new_tab_btn.clicked.connect(lambda: self.add_new_tab())
-        self.tabs.setCornerWidget(self.new_tab_btn, Qt.TopRightCorner)
 
         self.layout.addWidget(self.tabs)
 
+        # Conexões
         self.url_bar.returnPressed.connect(self.navigate_to_url)
         self.back_btn.clicked.connect(lambda: self.current_view().back())
         self.forward_btn.clicked.connect(lambda: self.current_view().forward())
         self.reload_btn.clicked.connect(lambda: self.current_view().reload())
 
+        # Atalhos
         QShortcut(QKeySequence("Ctrl+="), self, lambda: self.current_tab_widget().zoom_in())
         QShortcut(QKeySequence("Ctrl+-"), self, lambda: self.current_tab_widget().zoom_out())
         QShortcut(QKeySequence("Ctrl+0"), self, lambda: self.current_tab_widget().reset_zoom())
@@ -96,6 +105,7 @@ class VortexBrowser(QMainWindow):
         QShortcut(QKeySequence("Ctrl+T"), self, lambda: self.add_new_tab())
         QShortcut(QKeySequence("Ctrl+W"), self, lambda: self.close_tab(self.tabs.currentIndex()))
 
+        # Home page local
         home_path = os.path.abspath("home.html")
         if not os.path.exists(home_path):
             with open(home_path, "w", encoding="utf-8") as f:
@@ -143,7 +153,12 @@ class VortexBrowser(QMainWindow):
 
     def update_url(self, q, browser_tab):
         if self.tabs.currentWidget() == browser_tab:
-            self.url_bar.setText(q.toString())
+            url_str = q.toString()
+            
+            if "home.html" in url_str:
+                self.url_bar.clear()
+            else:
+                self.url_bar.setText(url_str)
 
     def update_title(self, title, browser_tab):
         index = self.tabs.indexOf(browser_tab)
@@ -162,46 +177,56 @@ class VortexBrowser(QMainWindow):
         elif "." in text and " " not in text:
             view.load(QUrl("https://" + text))
         else:
-           
             query = text.replace(" ", "+")
             view.load(QUrl(f"https://duckduckgo.com/?q={query}"))
 
 
 if __name__ == "__main__":
-    
-    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
     app = QApplication(sys.argv)
     
-    
     app.setStyleSheet("""
-        QMainWindow { background-color: #181818; }
+        QMainWindow { background-color: #121212; }
         QLineEdit { 
-            background-color: #242424; 
+            background-color: #1e1e1e; 
             color: #ffffff; 
-            border: 1px solid #333333; 
-            border-radius: 4px; 
-            padding: 5px; 
+            border: 1px solid #2c2c2c; 
+            border-radius: 6px; 
+            padding: 4px 10px; 
             font-size: 13px;
         }
-        QLineEdit:focus { border: 1px solid #0066cc; }
+        QLineEdit:focus { 
+            border: 1px solid #0066cc; 
+            background-color: #181818;
+        }
         QPushButton { 
-            background-color: #2a2a2a; 
+            background-color: #1e1e1e; 
             color: #ffffff; 
-            border: 1px solid #333; 
-            border-radius: 4px; 
+            border: 1px solid #2c2c2c; 
+            border-radius: 6px; 
             font-weight: bold; 
         }
-        QPushButton:hover { background-color: #353535; }
-        QTabWidget::pane { border-top: 1px solid #282828; background: #181818; }
-        QTabBar::tab { 
-            background: #202020; 
-            color: #aaa; 
-            padding: 6px 14px; 
-            border-top-left-radius: 4px; 
-            border-top-right-radius: 4px; 
-            margin-right: 2px; 
+        QPushButton:hover { background-color: #282828; }
+        QPushButton:pressed { background-color: #111111; }
+        QTabWidget::pane { 
+            border: 1px solid #222222; 
+            background: #121212; 
+            border-radius: 4px;
         }
-        QTabBar::tab:selected { background: #282828; color: #fff; border-bottom: 2px solid #0066cc; }
+        QTabBar::tab { 
+            background: #1a1a1a; 
+            color: #888; 
+            padding: 6px 14px; 
+            border-top-left-radius: 6px; 
+            border-top-right-radius: 6px; 
+            margin-right: 2px; 
+            border: 1px solid #222;
+            border-bottom: none;
+        }
+        QTabBar::tab:selected { 
+            background: #242424; 
+            color: #fff; 
+            border-bottom: 2px solid #0066cc; 
+        }
     """)
 
     browser = VortexBrowser()
