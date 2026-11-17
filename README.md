@@ -37,7 +37,7 @@ Tested on Linux under the same conditions (idle / 1 tab open):
 <img width="1915" height="448" alt="Captura de tela_2026-11-13_02-56-51" src="https://github.com/user-attachments/assets/ffe96272-3915-4e2c-80f8-23fed8a68cd6" />
 
 
-| Browser / Navegador | RAM Usage (Idle) (Start page) | RAM Usage with 1 tab (splop.io) |
+| Browser / Navegador | RAM Usage (Idle) (Start page) | RAM Usage with 1 tab (Youtube.com) |
 | :--- | :---: | :---: |
 | **Vortex Browser** | ~340,7 MB | ~378,4 MB |
 | **Falkon** | ~525,4 MB | ~1,087 GB |
